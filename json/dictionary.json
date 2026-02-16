@@ -2,7 +2,10 @@
   "metadata": {
     "version": "1.0"
   },
-  "noun": {},
+  "noun": {
+    "injection": "pagtutugsuk",
+    "rain": "ulan"
+  },
   "pronoun": {},
   "verb": {},
   "adjective": {
@@ -16,8 +19,5 @@
   "article": {},
   "interjection": {},
   "phrase": {},
-  "sentence": {},
-  "noun": {
-    "injection": "pagtutugsuk"
-  }
+  "sentence": {}
 }
