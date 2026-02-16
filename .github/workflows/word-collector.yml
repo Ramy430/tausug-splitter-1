@@ -37,7 +37,7 @@ jobs:
           TAUSUG="${{ steps.parse.outputs.tausug }}"
           ENGLISH="${{ steps.parse.outputs.english }}"
           CATEGORY="${{ steps.parse.outputs.category }}"
-          FILE="dictionary.json"   # adjust path if needed (e.g., json/dictionary.json)
+          "FILE="json/dictionary.json"   # adjust path if needed (e.g., json/dictionary.json)
 
           # Create file if it doesn't exist (with basic structure)
           if [ ! -f "$FILE" ]; then
