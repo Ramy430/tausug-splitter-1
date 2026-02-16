@@ -16,3 +16,19 @@
   "phrase": {},
   "sentence": {}
 }
+- name: Parse issue body
+  id: parse
+  run: |
+    # ... (your existing parsing commands)
+    echo "tausug=$TAUSUG" >> $GITHUB_OUTPUT
+    echo "english=$ENGLISH" >> $GITHUB_OUTPUT
+    echo "category=$CATEGORY" >> $GITHUB_OUTPUT
+
+- name: Debug parsed values   # 👈 ADD THIS
+  run: |
+    echo "Tausug: ${{ steps.parse.outputs.tausug }}"
+    echo "English: ${{ steps.parse.outputs.english }}"
+    echo "Category: ${{ steps.parse.outputs.category }}"
+
+- name: Update dictionary.json
+  # ... rest of your workflow
