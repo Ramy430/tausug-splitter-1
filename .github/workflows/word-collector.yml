@@ -38,7 +38,22 @@ jobs:
           ENGLISH="${{ steps.parse.outputs.english }}"
           CATEGORY="${{ steps.parse.outputs.category }}"
           "FILE="json/dictionary.json"   # adjust path if needed (e.g., json/dictionary.json)
+          
+- name: Debug parsed values
+  run: |
+    echo "Tausug: ${{ steps.parse.outputs.tausug }}"
+    echo "English: ${{ steps.parse.outputs.english }}"
+    echo "Category: ${{ steps.parse.outputs.category }}"
 
+- name: Debug file status
+  run: |
+    echo "Current directory: $(pwd)"
+    ls -la json/ || echo "json/ folder not found"
+    if [ -f "json/dictionary.json" ]; then
+      echo "✅ dictionary.json exists"
+    else
+      echo "❌ dictionary.json not found"
+    fi
           # Create file if it doesn't exist (with basic structure)
           if [ ! -f "$FILE" ]; then
             echo '{"metadata":{"version":"1.0"},"noun":{},"pronoun":{},"verb":{},"adjective":{},"adverb":{},"preposition":{},"conjunction":{},"article":{},"interjection":{},"phrase":{},"sentence":{}}' > "$FILE"
