@@ -51,5 +51,52 @@ function displayDictionaryStats(metadata) {
             <span>📁 Categories: ${metadata.categories.join(', ')}</span>
         `;
     }
+        document.getElementById('exportBtn').addEventListener('click', exportToJSON);
+
+function exportToJSON() {
+    const boxes = document.querySelectorAll('.word-box');
+    if (!boxes.length) {
+        alert('No words to export. Split a sentence first.');
+        return;
+    }
+
+    const words = [];
+    boxes.forEach(box => {
+        const word = box.querySelector('.word-span').textContent.trim();
+        const meaning = box.querySelector('.meaning-input').value.trim();
+        const category = box.querySelector('.category-input').value.trim() || 'uncategorized';
+        
+        // Only include words that have both word and meaning
+        if (word && meaning) {
+            words.push({
+                tausug: word,
+                english: meaning,
+                category: category
+                // pronunciation is not collected from user input; you can add a field later if needed
+            });
+        }
+    });
+
+    if (words.length === 0) {
+        alert('No valid word–meaning pairs to export.');
+        return;
+    }
+
+    // Create JSON string
+    const jsonStr = JSON.stringify(words, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+
+    // Trigger download
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `tausug-words-${new Date().toISOString().slice(0,10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    alert(`Exported ${words.length} word(s) to JSON.`);
+}
 }
 
