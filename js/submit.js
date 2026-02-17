@@ -63,6 +63,7 @@ function submitToGitHub() {
         const url = `https://github.com/${REPO_OWNER}/${REPO_NAME}/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}&labels=word-submission`;
         window.open(url, '_blank');
     });
+  const category = box.querySelector('.category-input').value.trim() || 'uncategorized';
 
     setTimeout(() => {
         alert(`${submissions.length} issue(s) opened. Please review and submit each on GitHub.`);
