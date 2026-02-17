@@ -28,7 +28,6 @@ window.dictionaryReady = new Promise((resolve, reject) => {
         })
         .catch(error => {
             console.error('❌ Dictionary failed to load:', error);
-            // Dispatch an error event so UI can show a message
             window.dispatchEvent(new CustomEvent('dictionaryerror', { detail: error.message }));
             reject(error);
         });
