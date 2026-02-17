@@ -52,6 +52,14 @@ button:hover {
     background: #b56532;
 }
 
+/* Distinct styling for the Export button */
+#exportBtn {
+    background: #3a86ff;
+}
+#exportBtn:hover {
+    background: #2667cc;
+}
+
 #outputArea {
     margin-top: 20px;
 }
