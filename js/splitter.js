@@ -10,4 +10,8 @@
         box.appendChild(categoryInput);
         outputArea.appendChild(box);
     });
+const pronunInput = document.createElement('input');
+pronunInput.type = 'text';
+pronunInput.placeholder = 'Pronunciation';
+pronunInput.className = 'pronunciation-input';
 }
