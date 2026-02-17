@@ -32,4 +32,24 @@
     setTimeout(() => {
         alert(`${submissions.length} issue(s) opened. Please review and submit each on GitHub.`);
     }, 1000);
+
+}// After dictionary is loaded
+fetch('...')
+  .then(response => response.json())
+  .then(data => {
+    dictionary = data.words;
+    displayDictionaryStats(data.metadata);
+    console.log(`Dictionary loaded: ${dictionary.length} words`);
+  });
+
+function displayDictionaryStats(metadata) {
+    const statsDiv = document.getElementById('dictionaryStats');
+    if (statsDiv) {
+        statsDiv.innerHTML = `
+            <span>📚 ${metadata.totalWords} words</span>
+            <span>🕒 Last updated: ${metadata.lastUpdated}</span>
+            <span>📁 Categories: ${metadata.categories.join(', ')}</span>
+        `;
+    }
 }
+
