@@ -15,14 +15,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        - name: Install jq
-  run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
 
       - name: Parse issue body
         id: parse
         run: |
           BODY="${{ github.event.issue.body }}"
-          # Extract fields (case-insensitive)
           TAUSUG=$(echo "$BODY" | grep -i '^Tausug:' | sed 's/^Tausug: //i' | head -1 | xargs)
           ENGLISH=$(echo "$BODY" | grep -i '^English:' | sed 's/^English: //i' | head -1 | xargs)
           CATEGORY=$(echo "$BODY" | grep -i '^Category:' | sed 's/^Category: //i' | head -1 | tr '[:upper:]' '[:lower:]' | xargs)
@@ -49,13 +49,10 @@ jobs:
           FILE="json/dictionary.json"
           TODAY=$(date +%Y-%m-%d)
 
-          # If dictionary.json doesn't exist, create a minimal one
           if [ ! -f "$FILE" ]; then
             echo '{"metadata":{"version":"2.0","lastUpdated":"'$TODAY'","totalWords":0,"contributors":[],"categories":[]},"words":[]}' > "$FILE"
           fi
 
-          # Build jq filter
-          # Add the new word to the words array, update metadata
           jq --arg t "$TAUSUG" \
              --arg e "$ENGLISH" \
              --arg c "$CATEGORY" \
