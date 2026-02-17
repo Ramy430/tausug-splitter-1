@@ -6,7 +6,7 @@ on:
 
 jobs:
   add-words:
-  if: toLower(github.event.label.name) == 'approved'
+    if: github.event.label.name == 'approved'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -20,47 +20,58 @@ jobs:
         id: parse
         run: |
           BODY="${{ github.event.issue.body }}"
-          TAUSUG=$(echo "$BODY" | grep -i '^Tausug:' | sed 's/^Tausug: //i' | head -1)
-          ENGLISH=$(echo "$BODY" | grep -i '^English:' | sed 's/^English: //i' | head -1)
-          CATEGORY=$(echo "$BODY" | grep -i '^Category:' | sed 's/^Category: //i' | head -1 | tr '[:upper:]' '[:lower:]')
+          # Extract fields (case-insensitive)
+          TAUSUG=$(echo "$BODY" | grep -i '^Tausug:' | sed 's/^Tausug: //i' | head -1 | xargs)
+          ENGLISH=$(echo "$BODY" | grep -i '^English:' | sed 's/^English: //i' | head -1 | xargs)
+          CATEGORY=$(echo "$BODY" | grep -i '^Category:' | sed 's/^Category: //i' | head -1 | tr '[:upper:]' '[:lower:]' | xargs)
+          PRONUN=$(echo "$BODY" | grep -i '^Pronunciation:' | sed 's/^Pronunciation: //i' | head -1 | xargs)
+          
           echo "tausug=$TAUSUG" >> $GITHUB_OUTPUT
           echo "english=$ENGLISH" >> $GITHUB_OUTPUT
           echo "category=$CATEGORY" >> $GITHUB_OUTPUT
+          echo "pronunciation=$PRONUN" >> $GITHUB_OUTPUT
 
       - name: Debug parsed values
         run: |
           echo "Tausug: ${{ steps.parse.outputs.tausug }}"
           echo "English: ${{ steps.parse.outputs.english }}"
           echo "Category: ${{ steps.parse.outputs.category }}"
-
-      - name: Check file existence
-        run: |
-          echo "Current directory: $(pwd)"
-          ls -la json/ || echo "json/ folder not found"
-          if [ -f "json/dictionary.json" ]; then
-            echo "✅ dictionary.json exists"
-          else
-            echo "❌ dictionary.json not found"
-          fi
+          echo "Pronunciation: ${{ steps.parse.outputs.pronunciation }}"
 
       - name: Update dictionary.json
         run: |
           TAUSUG="${{ steps.parse.outputs.tausug }}"
           ENGLISH="${{ steps.parse.outputs.english }}"
           CATEGORY="${{ steps.parse.outputs.category }}"
+          PRONUN="${{ steps.parse.outputs.pronunciation }}"
           FILE="json/dictionary.json"
+          TODAY=$(date +%Y-%m-%d)
 
+          # If dictionary.json doesn't exist, create a minimal one
           if [ ! -f "$FILE" ]; then
-            echo '{"metadata":{"version":"1.0"},"noun":{},"pronoun":{},"verb":{},"adjective":{},"adverb":{},"preposition":{},"conjunction":{},"article":{},"interjection":{},"phrase":{},"sentence":{}}' > "$FILE"
+            echo '{"metadata":{"version":"2.0","lastUpdated":"'$TODAY'","totalWords":0,"contributors":[],"categories":[]},"words":[]}' > "$FILE"
           fi
 
-          jq --arg cat "$CATEGORY" --arg key "$TAUSUG" --arg val "$ENGLISH" \
-            '.[$cat] += {($key): $val}' "$FILE" > tmp.json && mv tmp.json "$FILE"
+          # Build jq filter
+          # Add the new word to the words array, update metadata
+          jq --arg t "$TAUSUG" \
+             --arg e "$ENGLISH" \
+             --arg c "$CATEGORY" \
+             --arg p "$PRONUN" \
+             --arg today "$TODAY" \
+            '.words += [{
+               tausug: $t,
+               english: $e,
+               category: $c,
+               pronunciation: (if $p == "" then null else $p end)
+             }] |
+             .metadata.totalWords = (.words | length) |
+             .metadata.lastUpdated = $today |
+             .metadata.categories = (.metadata.categories + [$c] | unique | sort)
+            ' "$FILE" > tmp.json && mv tmp.json "$FILE"
 
       - name: Show updated file
-        run: |
-          echo "Updated dictionary.json:"
-          cat json/dictionary.json
+        run: cat json/dictionary.json
 
       - name: Create Pull Request
         id: create-pr
@@ -75,6 +86,7 @@ jobs:
             **Tausug:** ${{ steps.parse.outputs.tausug }}
             **English:** ${{ steps.parse.outputs.english }}
             **Category:** ${{ steps.parse.outputs.category }}
+            **Pronunciation:** ${{ steps.parse.outputs.pronunciation || '(none)' }}
           branch: add-word-${{ github.event.issue.number }}
           base: main
           labels: word-submission, automated-pr
