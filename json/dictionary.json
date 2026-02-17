@@ -1,12 +1,22 @@
-
 {
   "metadata": {
     "version": "2.0",
     "description": "Tausug Language Dictionary - Community Edition",
     "lastUpdated": "2026-02-17",
-    "totalWords": 170,
-    "contributors": ["Ramy430"],
-    "categories": ["adjectives", "adverbs", "interjections", "nouns", "numbers", "phrases", "pronouns", "verbs"]
+    "totalWords": 171,
+    "contributors": [
+      "Ramy430"
+    ],
+    "categories": [
+      "adjectives",
+      "adverbs",
+      "interjections",
+      "nouns",
+      "numbers",
+      "phrases",
+      "pronouns",
+      "verbs"
+    ]
   },
   "words": [
     {
@@ -1028,6 +1038,12 @@
       "english": "infant, baby, or child",
       "category": "nouns",
       "pronunciation": "baTa'-baTa'"
+    },
+    {
+      "tausug": "puasa",
+      "english": "fasting",
+      "category": "nouns",
+      "pronunciation": "pu-asA"
     }
   ]
 }
