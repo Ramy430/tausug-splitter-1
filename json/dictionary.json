@@ -8,3 +8,21 @@
     "categories": ["adjectives", "adverbs", "interjections", "nouns", "numbers", "phrases", "pronouns", "verbs"]
   },
   "words": [
+{
+  "tausug": "lasa",
+  "english": "love",
+  "category": "nouns",
+  "pronunciation": "la-sa"
+},
+{
+  "tausug": "basih",
+  "english": "iron",
+  "category": "nouns",
+  "pronunciation": "ba-si'"
+},
+{
+  "tausug": "batahbatah",
+  "english": "infant, baby, or child",
+  "category": "nouns",
+  "pronunciation": "baTa'-baTa'"
+}
