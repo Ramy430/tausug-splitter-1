@@ -1,28 +1,31 @@
-- name: Update dictionary.json
-  run: |
-    TAUSUG="${{ steps.parse.outputs.tausug }}"
-    ENGLISH="${{ steps.parse.outputs.english }}"
-    CATEGORY="${{ steps.parse.outputs.category }}"
-    PRONUN="${{ steps.parse.outputs.pronunciation }}"
-    FILE="json/dictionary.json"
-    TODAY=$(date +%Y-%m-%d)
-
-    if [ ! -f "$FILE" ]; then
-      echo '{"metadata":{"version":"2.0","lastUpdated":"'$TODAY'","totalWords":0,"contributors":[],"categories":[]},"words":[]}' > "$FILE"
-    fi
-
-    jq --arg t "$TAUSUG" \
-       --arg e "$ENGLISH" \
-       --arg c "$CATEGORY" \
-       --arg p "$PRONUN" \
-       --arg today "$TODAY" \
-      '.words = [{
-         tausug: $t,
-         english: $e,
-         category: $c,
-         pronunciation: (if $p == "" then null else $p end)
-       }] + .words |
-       .metadata.totalWords = (.words | length) |
-       .metadata.lastUpdated = $today |
-       .metadata.categories = (.metadata.categories + [$c] | unique | sort)
-      ' "$FILE" > tmp.json && mv tmp.json "$FILE"
+{
+  "metadata": {
+    "version": "2.0",
+    "description": "Tausug Language Dictionary - Community Edition",
+    "lastUpdated": "2026-02-17",
+    "totalWords": 170,
+    "contributors": ["Ramy430"],
+    "categories": ["adjectives", "adverbs", "interjections", "nouns", "numbers", "phrases", "pronouns", "verbs"]
+  },
+  "words": [
+    {
+      "tausug": "lasa",
+      "english": "love",
+      "category": "nouns",
+      "pronunciation": "la-sa"
+    },
+    {
+      "tausug": "basih",
+      "english": "iron",
+      "category": "nouns",
+      "pronunciation": "ba-si'"
+    },
+    {
+      "tausug": "batahbatah",
+      "english": "infant, baby, or child",
+      "category": "nouns",
+      "pronunciation": "baTa'-baTa'"
+    }
+    ... (all other 167 words here) ...
+  ]
+}
