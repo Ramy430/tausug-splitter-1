@@ -44,7 +44,7 @@ button:hover {
     background: #1b4332;
 }
 
-/* Make the Submit button stand out */
+/* Distinct button colours */
 #submitBtn {
     background: #d68c45;
 }
@@ -52,7 +52,6 @@ button:hover {
     background: #b56532;
 }
 
-/* Distinct styling for the Export button */
 #exportBtn {
     background: #3a86ff;
 }
@@ -86,7 +85,8 @@ button:hover {
 }
 
 .meaning-input,
-.category-input {
+.category-input,
+.pronunciation-input {
     flex: 1;
     padding: 6px 10px;
     border: 1px solid #ced4da;
@@ -95,14 +95,15 @@ button:hover {
 }
 
 .meaning-input:focus,
-.category-input:focus {
+.category-input:focus,
+.pronunciation-input:focus {
     outline: none;
     border-color: #2d6a4f;
 }
 
-/* Style placeholders */
 .meaning-input::placeholder,
-.category-input::placeholder {
+.category-input::placeholder,
+.pronunciation-input::placeholder {
     color: #adb5bd;
     font-style: italic;
 }
