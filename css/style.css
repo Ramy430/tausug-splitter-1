@@ -78,3 +78,20 @@ button:hover {
     outline: none;
     border-color: #2d6a4f;
 }
+
+.stats-bar {
+    background: #f0f0f0;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-size: 0.9em;
+}
+.stats-bar span {
+    background: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
