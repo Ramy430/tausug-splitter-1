@@ -1,3 +1,71 @@
+// js/submit.js
+
+let dictionary = [];
+
+// Load dictionary with metadata
+fetch('https://raw.githubusercontent.com/ramy430/tausug-splitter-1/main/json/dictionary.json')
+  .then(response => {
+    if (!response.ok) throw new Error('Failed to load dictionary');
+    return response.json();
+  })
+  .then(data => {
+    dictionary = data.words;               // the word array inside metadata
+    displayDictionaryStats(data.metadata);  // show stats on page
+    console.log(`Dictionary loaded: ${dictionary.length} words`);
+  })
+  .catch(error => {
+    console.error('Dictionary error:', error);
+    document.getElementById('dictionaryStats').innerHTML = 
+      '<span>⚠️ Dictionary failed to load</span>';
+  });
+
+// Show dictionary stats in the stats bar
+function displayDictionaryStats(metadata) {
+    const statsDiv = document.getElementById('dictionaryStats');
+    if (statsDiv) {
+        statsDiv.innerHTML = `
+            <span>📚 ${metadata.totalWords} words</span>
+            <span>🕒 Last updated: ${metadata.lastUpdated}</span>
+            <span>📁 Categories: ${metadata.categories.join(', ')}</span>
+        `;
+    }
+}
+
+// Lookup a word in the dictionary (optional helper)
+function getWordInfo(tausugWord) {
+    return dictionary.find(entry => entry.tausug === tausugWord);
+}
+
+// Normalize category to plural form (for GitHub issues)
+function normalizeCategory(cat) {
+    const map = {
+        'noun': 'nouns',
+        'verb': 'verbs',
+        'adjective': 'adjectives',
+        'pronoun': 'pronouns',
+        'number': 'numbers',
+        'phrase': 'phrases'
+    };
+    return map[cat.toLowerCase()] || cat;
+}
+
+// Wait for DOM before attaching event listeners
+document.addEventListener('DOMContentLoaded', () => {
+    const submitBtn = document.getElementById('submitBtn');
+    if (submitBtn) {
+        submitBtn.addEventListener('click', submitToGitHub);
+    }
+    
+    const exportBtn = document.getElementById('exportBtn');
+    if (exportBtn) {
+        exportBtn.addEventListener('click', exportToJSON);
+    }
+});
+
+// Submit each word as a separate GitHub issue
+function submitToGitHub() {
+    const boxes = document.querySelectorAll('.word-box');
+    if (!boxes.length) {
         alert('No words to submit. Split a sentence first.');
         return;
     }
@@ -6,7 +74,9 @@
     boxes.forEach(box => {
         const word = box.querySelector('.word-span').textContent.trim();
         const meaning = box.querySelector('.meaning-input').value.trim();
-        const category = box.querySelector('.category-input').value.trim() || 'uncategorized';
+        let category = box.querySelector('.category-input').value.trim() || 'uncategorized';
+        category = normalizeCategory(category);   // ensure plural form
+        
         if (word && meaning) {
             submissions.push({ tausug: word, english: meaning, category });
         }
@@ -17,9 +87,8 @@
         return;
     }
 
-    // 🔁 Update with your repository details
     const REPO_OWNER = 'Ramy430';
-    const REPO_NAME = 'tausug-splitter-1'; // change if needed
+    const REPO_NAME = 'tausug-splitter-1';   // change if needed
 
     submissions.forEach(item => {
         const title = `New Word: ${item.tausug} = ${item.english}`;
@@ -27,32 +96,13 @@
         const url = `https://github.com/${REPO_OWNER}/${REPO_NAME}/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}&labels=word-submission`;
         window.open(url, '_blank');
     });
-  const category = box.querySelector('.category-input').value.trim() || 'uncategorized';
 
     setTimeout(() => {
         alert(`${submissions.length} issue(s) opened. Please review and submit each on GitHub.`);
     }, 1000);
+}
 
-}// After dictionary is loaded
-fetch('...')
-  .then(response => response.json())
-  .then(data => {
-    dictionary = data.words;
-    displayDictionaryStats(data.metadata);
-    console.log(`Dictionary loaded: ${dictionary.length} words`);
-  });
-
-function displayDictionaryStats(metadata) {
-    const statsDiv = document.getElementById('dictionaryStats');
-    if (statsDiv) {
-        statsDiv.innerHTML = `
-            <span>📚 ${metadata.totalWords} words</span>
-            <span>🕒 Last updated: ${metadata.lastUpdated}</span>
-            <span>📁 Categories: ${metadata.categories.join(', ')}</span>
-        `;
-    }
-        document.getElementById('exportBtn').addEventListener('click', exportToJSON);
-
+// Export the current words as a JSON file
 function exportToJSON() {
     const boxes = document.querySelectorAll('.word-box');
     if (!boxes.length) {
@@ -66,13 +116,13 @@ function exportToJSON() {
         const meaning = box.querySelector('.meaning-input').value.trim();
         const category = box.querySelector('.category-input').value.trim() || 'uncategorized';
         
-        // Only include words that have both word and meaning
+        // Only include valid pairs
         if (word && meaning) {
             words.push({
                 tausug: word,
                 english: meaning,
                 category: category
-                // pronunciation is not collected from user input; you can add a field later if needed
+                // pronunciation can be added later if collected
             });
         }
     });
@@ -82,12 +132,11 @@ function exportToJSON() {
         return;
     }
 
-    // Create JSON string
+    // Create downloadable JSON
     const jsonStr = JSON.stringify(words, null, 2);
     const blob = new Blob([jsonStr], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
 
-    // Trigger download
     const a = document.createElement('a');
     a.href = url;
     a.download = `tausug-words-${new Date().toISOString().slice(0,10)}.json`;
@@ -98,5 +147,3 @@ function exportToJSON() {
 
     alert(`Exported ${words.length} word(s) to JSON.`);
 }
-}
-
