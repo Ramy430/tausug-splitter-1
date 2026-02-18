@@ -3,7 +3,7 @@
     "version": "2.0",
     "description": "Tausug Language Dictionary - Community Edition",
     "lastUpdated": "2026-02-18",
-    "totalWords": 175,
+    "totalWords": 176,
     "contributors": [
       "Ramy430"
     ],
@@ -1070,6 +1070,12 @@
       "english": "good",
       "category": "adjectives",
       "pronunciation": "ma-ra-yaw"
+    },
+    {
+      "tausug": "kagas",
+      "english": "abrasion",
+      "category": "nouns",
+      "pronunciation": "ka-gas"
     }
   ]
 }
