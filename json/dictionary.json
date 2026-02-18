@@ -2,8 +2,8 @@
   "metadata": {
     "version": "2.0",
     "description": "Tausug Language Dictionary - Community Edition",
-    "lastUpdated": "2026-02-17",
-    "totalWords": 173,
+    "lastUpdated": "2026-02-18",
+    "totalWords": 174,
     "contributors": [
       "Ramy430"
     ],
@@ -1058,6 +1058,12 @@
       "english": "until",
       "category": "preposition",
       "pronunciation": "sam-bil"
+    },
+    {
+      "tausug": "parasahan",
+      "english": "feeling",
+      "category": "nouns",
+      "pronunciation": "pa-ra-sa-Ha-n"
     }
   ]
 }
