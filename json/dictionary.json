@@ -3,7 +3,7 @@
     "version": "2.0",
     "description": "Tausug Language Dictionary - Community Edition",
     "lastUpdated": "2026-02-19",
-    "totalWords": 178,
+    "totalWords": 179,
     "contributors": [
       "Ramy430"
     ],
@@ -1088,6 +1088,12 @@
       "english": "sensitivity, or allergy",
       "category": "nouns",
       "pronunciation": "ti-ku-ti-ku"
+    },
+    {
+      "tausug": "buhangin",
+      "english": "sand",
+      "category": "nouns",
+      "pronunciation": "bu-hA-ngin"
     }
   ]
 }
