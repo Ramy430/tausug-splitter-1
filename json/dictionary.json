@@ -2,8 +2,8 @@
   "metadata": {
     "version": "2.0",
     "description": "Tausug Language Dictionary - Community Edition",
-    "lastUpdated": "2026-02-18",
-    "totalWords": 176,
+    "lastUpdated": "2026-02-19",
+    "totalWords": 177,
     "contributors": [
       "Ramy430"
     ],
@@ -1076,6 +1076,12 @@
       "english": "abrasion",
       "category": "nouns",
       "pronunciation": "ka-gas"
+    },
+    {
+      "tausug": "guru",
+      "english": "teacher,or mentor",
+      "category": "nouns",
+      "pronunciation": "gu-ru"
     }
   ]
 }
